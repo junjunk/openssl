@@ -83,6 +83,7 @@
                              generator_deps => $unified_info{depends}->{$script},
                              deps => $unified_info{depends}->{$src},
                              incs => $unified_info{includes}->{$obj},
+                             defs => $unified_info{defines}->{$obj},
                              %opts);
          foreach (@{$unified_info{depends}->{$src}}) {
              dogenerate($_, $obj, $bin, %opts);
@@ -104,6 +105,7 @@
                          srcs => $unified_info{sources}->{$obj},
                          deps => $unified_info{depends}->{$obj},
                          incs => $unified_info{includes}->{$obj},
+                         defs => $unified_info{defines}->{$obj},
                          %opts);
          foreach ((@{$unified_info{sources}->{$obj}},
                    @{$unified_info{depends}->{$obj}})) {
