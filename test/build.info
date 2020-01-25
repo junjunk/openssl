@@ -544,11 +544,11 @@ INCLUDE_MAIN___test_libtestutil_OLB = /INCLUDE=MAIN
   # We disable this test completely in a shared build because it deliberately
   # redefines some internal libssl symbols. This doesn't work in a non-shared
   # build
-  IF[{- !$disabled{shared} -}]
+  IF[{- !$disabled{shared} && $disabled{ktls} -}]
     PROGRAMS_NO_INST=tls13secretstest
     SOURCE[tls13secretstest]=tls13secretstest.c
-    SOURCE[tls13secretstest]= ../ssl/tls13_enc.c ../ssl/packet.c
-    INCLUDE[tls13secretstest]=.. ../include
+    SOURCE[tls13secretstest]=../ssl/tls13_enc.c ../ssl/packet.c
+    INCLUDE[tls13secretstest]=.. ../include ../apps/include
     DEPEND[tls13secretstest]=../libcrypto ../libssl libtestutil.a
   ENDIF
 
