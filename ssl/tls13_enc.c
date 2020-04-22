@@ -432,7 +432,6 @@ static int derive_secret_key_and_iv(SSL *s, int sending, const EVP_MD *md,
 
     return 1;
  err:
-    OPENSSL_cleanse(key, EVP_MAX_KEY_LENGTH);
     return 0;
 }
 
@@ -820,6 +819,7 @@ skip_ktls:
 #endif
     ret = 1;
  err:
+    OPENSSL_cleanse(key, sizeof(key));
     OPENSSL_cleanse(secret, sizeof(secret));
     return ret;
 }
@@ -870,6 +870,7 @@ int tls13_update_key(SSL *s, int sending)
     s->statem.enc_write_state = ENC_WRITE_STATE_VALID;
     ret = 1;
  err:
+    OPENSSL_cleanse(key, sizeof(key));
     OPENSSL_cleanse(secret, sizeof(secret));
     return ret;
 }
