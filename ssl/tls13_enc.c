@@ -728,7 +728,7 @@ int tls13_change_cipher_state(SSL *s, int which)
         s->statem.enc_write_state = ENC_WRITE_STATE_VALID;
 #ifndef OPENSSL_NO_KTLS
 # ifndef __FreeBSD__
-    if (!(which & SSL3_CC_WRITE)
+    if (!(which & SSL3_CC_WRITE) || !(which & SSL3_CC_APPLICATION)
         || ((which & SSL3_CC_WRITE) && (s->mode & SSL_MODE_NO_KTLS_TX)))
         goto skip_ktls;
 
