@@ -2013,6 +2013,7 @@ ossl_ssize_t SSL_sendfile(SSL *s, int fd, off_t offset, size_t size, int flags)
         /* if it went, fall through and send more stuff */
     }
 
+    clear_sys_error();
     s->rwstate = SSL_WRITING;
     if (BIO_flush(s->wbio) <= 0) {
         if (!BIO_should_retry(s->wbio)) {
