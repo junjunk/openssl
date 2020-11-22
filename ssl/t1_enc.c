@@ -423,6 +423,10 @@ int tls1_change_cipher_state(SSL *s, int which)
         if (taglen != EVP_CCM_TLS_TAG_LEN)
           goto skip_ktls;
         break;
+#  ifndef OPENSSL_NO_CHACHA
+    case NID_chacha20_poly1305:
+        break;
+#  endif
     default:
         goto skip_ktls;
     }
@@ -517,6 +521,24 @@ int tls1_change_cipher_state(SSL *s, int which)
                     TLS_CIPHER_AES_GCM_128_REC_SEQ_SIZE);
         rec_seq = crypto_info.ccm128.rec_seq;
         break;
+#ifndef OPENSSL_NO_CHACHA       
+    case NID_chacha20_poly1305:
+        crypto_info.chacha20_poly1305.info.cipher_type = TLS_CIPHER_CHACHA20_POLY1305;
+        crypto_info.chacha20_poly1305.info.version = s->version;
+        crypto_info.tls_crypto_info_len = sizeof(crypto_info.chacha20_poly1305);
+
+        memcpy(crypto_info.chacha20_poly1305.iv, iv,
+		TLS_CIPHER_CHACHA20_POLY1305_IV_SIZE);
+        memcpy(crypto_info.chacha20_poly1305.key, key, EVP_CIPHER_key_length(c));
+        if (which & SSL3_CC_WRITE)
+            memcpy(crypto_info.chacha20_poly1305.rec_seq, &s->rlayer.write_sequence,
+                    TLS_CIPHER_CHACHA20_POLY1305_REC_SEQ_SIZE);
+        else
+            memcpy(crypto_info.chacha20_poly1305.rec_seq, &s->rlayer.read_sequence,
+                    TLS_CIPHER_CHACHA20_POLY1305_REC_SEQ_SIZE);
+        rec_seq = crypto_info.chacha20_poly1305.rec_seq;
+        break;
+#endif
     default:
         goto skip_ktls;
     }

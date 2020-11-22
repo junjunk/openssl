@@ -911,7 +911,7 @@ static int execute_test_ktls(int cis_ktls_tx, int cis_ktls_rx,
 #endif
 
 #if !defined(OPENSSL_NO_TLS1_3)
-    if (tlsver == TLS1_3_VERSION && (cis_ktls_rx || sis_ktls_rx))
+    if (tls_version == TLS1_3_VERSION && (cis_ktls_rx || sis_ktls_rx))
         return 1;
 #endif
 

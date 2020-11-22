@@ -122,6 +122,25 @@ struct tls_crypto_info {
 #    include <linux/tls.h>
 #   endif
 
+#   ifndef TLS_CIPHER_CHACHA20_POLY1305
+
+
+#    define TLS_CIPHER_CHACHA20_POLY1305                    54
+#    define TLS_CIPHER_CHACHA20_POLY1305_IV_SIZE            12
+#    define TLS_CIPHER_CHACHA20_POLY1305_KEY_SIZE   32
+#    define TLS_CIPHER_CHACHA20_POLY1305_SALT_SIZE          0
+#    define TLS_CIPHER_CHACHA20_POLY1305_TAG_SIZE   16
+#    define TLS_CIPHER_CHACHA20_POLY1305_REC_SEQ_SIZE       8
+
+struct tls12_crypto_info_chacha20_poly1305 {
+        struct tls_crypto_info info;
+        unsigned char iv[TLS_CIPHER_CHACHA20_POLY1305_IV_SIZE];
+        unsigned char key[TLS_CIPHER_CHACHA20_POLY1305_KEY_SIZE];
+        unsigned char salt[TLS_CIPHER_CHACHA20_POLY1305_SALT_SIZE];
+        unsigned char rec_seq[TLS_CIPHER_CHACHA20_POLY1305_REC_SEQ_SIZE];
+};
+
+#   endif
 #   if LINUX_VERSION_CODE < KERNEL_VERSION(5, 2, 0)
 #    define TLS_CIPHER_AES_CCM_128				53
 #    define TLS_CIPHER_AES_CCM_128_IV_SIZE			8
@@ -244,6 +263,7 @@ struct tls_crypto_info_all {
         struct tls12_crypto_info_aes_gcm_128 gcm128;
         struct tls12_crypto_info_aes_gcm_256 gcm256;
         struct tls12_crypto_info_aes_ccm_128 ccm128;
+        struct tls12_crypto_info_chacha20_poly1305 chacha20_poly1305;
     };
     size_t tls_crypto_info_len;
 };
